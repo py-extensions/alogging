@@ -1,0 +1,14 @@
+# IDE and venv files
+
+.idea
+*venv*
+
+# Poetry files
+
+poetry.lock
+
+# Byte-compiled / optimized / DLL files
+
+__pycache__
+*.py[cod]
+gi
