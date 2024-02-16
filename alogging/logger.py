@@ -19,6 +19,11 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 
 def sync_logger(f: F) -> F:
+    """Decorator to sync logger params after function call.
+
+    Sends logger params to the backend for synchronization.
+    """
+
     def wrapper(logger: "AsyncLogger", *args, **kwargs):
         result = f(logger, *args, **kwargs)
         logger.sync_logger()
@@ -28,9 +33,13 @@ def sync_logger(f: F) -> F:
 
 
 class AsyncLogger(logging.Logger):
+    """Logger that logs messages asynchronously."""
+
     _BACKEND_PROCESS = None
 
     def _log(self, level: int, msg: str, *args, **kwargs):
+        """Log messages to the queue."""
+
         if self._BACKEND_PROCESS is None:
             logging.warning("Backend not started, messages are queued.")
 
@@ -114,6 +123,8 @@ class AsyncLogger(logging.Logger):
         super().removeFilter(filter)
 
     def sync_logger(self):
+        """Sync logger with backend."""
+
         QUEUE.put_nowait(
             {
                 "internal": True,
@@ -137,7 +148,7 @@ def getLogger(name: Optional[str] = None) -> AsyncLogger:
 
 
 def basicConfig(**kwargs):
-    """Configure logger."""
+    """Configure logger. Copy of `logging.basicConfig` with wrapped handlers."""
 
     with LOCK:
         if len(root.handlers) == 0:

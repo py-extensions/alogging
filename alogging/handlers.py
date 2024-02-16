@@ -12,6 +12,8 @@ def wrap(
     cls: Callable[[P], logging.Handler],
     wrapper: Optional[Type["HandlerWrapper"]] = None,
 ) -> Callable[P, "HandlerWrapper"]:
+    """Wrap logging.Handler with HandlerWrapper to allow pickling."""
+
     def inner(*args: P.args, **kwargs: P.kwargs) -> HandlerWrapper:
         wrap_cls = wrapper or HandlerWrapper
         return wrap_cls(cls, args, kwargs)
@@ -20,6 +22,8 @@ def wrap(
 
 
 class HandlerWrapper:
+    """Base wrapper for logging.Handler-s that allows pickling for passing to backend."""
+
     def __init__(self, handler, args, kwargs):
         self.handler = handler
         self.args = args
@@ -56,6 +60,8 @@ class HandlerWrapper:
 
 
 class StreamHandlerWrapper(HandlerWrapper):
+    """Wrapper for StreamHandler that allows pickling."""
+
     def __getstate__(self):
         return {
             "handler": self.handler,

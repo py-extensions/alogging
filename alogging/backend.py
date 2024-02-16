@@ -7,6 +7,8 @@ from alogging.helpers import unpickled
 
 
 class AsyncLoggerBackend:
+    """Backend for async logging."""
+
     RUNNING = False
 
     @classmethod
@@ -22,6 +24,8 @@ class AsyncLoggerBackend:
 
     @classmethod
     def sync_logger(cls, logger_info: dict) -> logging.Logger:
+        """Sync logger with the one from main process."""
+
         if logger_info["name"] == "root":
             logger = logging.getLogger()
         else:
@@ -51,6 +55,8 @@ class AsyncLoggerBackend:
 
     @classmethod
     def process(cls, queue: "Queue"):
+        """Process messages from the queue and log them."""
+
         cls.RUNNING = True
 
         cls.add_signals()

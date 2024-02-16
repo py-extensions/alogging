@@ -10,6 +10,8 @@ LT = threading._RLock
 
 
 def pickled(obj: P) -> bytes:
+    """Pickle HandlerWrapper or Filter."""
+
     if not isinstance(obj, (alogging.handlers.HandlerWrapper, Filter)):
         raise ValueError("Only HandlerWrapper and Filters can set.")
 
@@ -17,4 +19,6 @@ def pickled(obj: P) -> bytes:
 
 
 def unpickled(value: bytes) -> P:
+    """Unpickle HandlerWrapper or Filter."""
+
     return pickle.loads(value)
