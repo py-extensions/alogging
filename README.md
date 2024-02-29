@@ -57,7 +57,13 @@ log.addHandler(handler)
 You can install `alogging` using pip:
 
 ```
-pip install alogging
+pip install py-extensions-alogging
+```
+
+Or add it using poetry:
+
+```
+poetry add py-extensions-alogging
 ```
 
 ## Contributing
