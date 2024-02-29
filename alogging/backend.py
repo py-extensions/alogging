@@ -12,7 +12,9 @@ class AsyncLoggerBackend:
     RUNNING = False
 
     @classmethod
-    def stop(cls, *args, **kwargs):
+    def stop(cls, *args, **kwargs):  # pylint: disable=unused-argument
+        """Stop the logger."""
+
         cls.RUNNING = False
 
     @classmethod
@@ -81,7 +83,7 @@ class AsyncLoggerBackend:
                     message["msg"],
                     *message["args"],
                 )
-            except Exception as e:
-                logging.exception(e)
             except BrokenPipeError:
                 sys.exit(1)
+            except Exception as e:
+                logging.exception(e)

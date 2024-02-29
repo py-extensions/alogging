@@ -14,7 +14,7 @@ def wrap(
 ) -> Callable[P, "HandlerWrapper"]:
     """Wrap logging.Handler with HandlerWrapper to allow pickling."""
 
-    def inner(*args: P.args, **kwargs: P.kwargs) -> HandlerWrapper:
+    def inner(*args: P.args, **kwargs: P.kwargs) -> "HandlerWrapper":
         wrap_cls = wrapper or HandlerWrapper
         return wrap_cls(cls, args, kwargs)
 
@@ -43,10 +43,14 @@ class HandlerWrapper:
             "level": self.level,
         }
 
-    def setFormatter(self, formatter) -> None:
+    def setFormatter(self, formatter) -> None:  # pylint: disable=invalid-name
+        """Set formatter for the handler."""
+
         self.formatter = formatter
 
-    def setLevel(self, level: int) -> None:
+    def setLevel(self, level: int) -> None:  # pylint: disable=invalid-name
+        """Set level for the handler."""
+
         self.level = level
 
     def __setstate__(self, state):

@@ -60,7 +60,7 @@ class AsyncLogger(logging.Logger):
         if cls._BACKEND_PROCESS is not None:
             return
 
-        global QUEUE
+        global QUEUE  # pylint: disable=global-statement
 
         try:
             with Manager() as manager:
@@ -90,19 +90,19 @@ class AsyncLogger(logging.Logger):
             QUEUE = Queue()
 
     @sync_logger
-    def addHandler(self, handler: alogging.handlers.HandlerWrapper):
+    def addHandler(self, hdlr: alogging.handlers.HandlerWrapper):
         """Add handler to logger."""
 
-        if not isinstance(handler, alogging.handlers.HandlerWrapper):
+        if not isinstance(hdlr, alogging.handlers.HandlerWrapper):
             raise RuntimeError("Cant add not wrapped handler")
 
-        super().addHandler(handler)
+        super().addHandler(hdlr)
 
     @sync_logger
-    def removeHandler(self, handler: alogging.handlers.HandlerWrapper):
+    def removeHandler(self, hdlr: alogging.handlers.HandlerWrapper):
         """Remove handler from logger."""
 
-        super().removeHandler(handler)
+        super().removeHandler(hdlr)
 
     @sync_logger
     def setLevel(self, level: int):
@@ -111,13 +111,13 @@ class AsyncLogger(logging.Logger):
         super().setLevel(level)
 
     @sync_logger
-    def addFilter(self, filter):
+    def addFilter(self, filter):  # pylint: disable=redefined-builtin
         """Add filter to logger."""
 
         super().addFilter(filter)
 
     @sync_logger
-    def removeFilter(self, filter):
+    def removeFilter(self, filter):  # pylint: disable=redefined-builtin
         """Remove filter from logger."""
 
         super().removeFilter(filter)
@@ -141,13 +141,13 @@ class AsyncLogger(logging.Logger):
 root = AsyncLogger("root", logging.WARNING)
 
 
-def getLogger(name: Optional[str] = None) -> AsyncLogger:
+def getLogger(name: Optional[str] = None) -> AsyncLogger:  # pylint: disable=invalid-name
     """Get logger with given name."""
 
     return AsyncLogger(name or "root")
 
 
-def basicConfig(**kwargs):
+def basicConfig(**kwargs):  # pylint: disable=invalid-name
     """Configure logger. Copy of `logging.basicConfig` with wrapped handlers."""
 
     with LOCK:
@@ -156,12 +156,11 @@ def basicConfig(**kwargs):
 
             if handlers is None:
                 if "stream" in kwargs and "filename" in kwargs:
-                    raise ValueError("'stream' and 'filename' should not be " "specified together")
+                    raise ValueError("'stream' and 'filename' should not be specified together")
             else:
                 if "stream" in kwargs or "filename" in kwargs:
                     raise ValueError(
-                        "'stream' or 'filename' should not be "
-                        "specified together with 'handlers'"
+                        "'stream' or 'filename' should not be specified together with 'handlers'"
                     )
 
             if handlers is None:
@@ -180,7 +179,7 @@ def basicConfig(**kwargs):
             style = kwargs.pop("style", "%")
 
             if style not in logging._STYLES:
-                raise ValueError("Style must be one of: %s" % ",".join(logging._STYLES.keys()))
+                raise ValueError(f"Style must be one of: {','.join(logging._STYLES.keys())}")
 
             fs = kwargs.pop("format", logging._STYLES[style][1])
             fmt = logging.Formatter(fs, dfs, style)
@@ -196,7 +195,7 @@ def basicConfig(**kwargs):
 
             if kwargs:
                 keys = ", ".join(kwargs.keys())
-                raise ValueError("Unrecognised argument(s): %s" % keys)
+                raise ValueError(f"Unrecognised argument(s): {keys}")
 
 
 AsyncLogger.manager = logging.Manager(root)

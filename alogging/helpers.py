@@ -5,7 +5,7 @@ from typing import Union
 
 import alogging.handlers
 
-P = Union[alogging.handlers.HandlerWrapper, Filter]
+P = Union[alogging.handlers.HandlerWrapper, Filter]  # pylint: disable=invalid-name
 LT = threading._RLock
 
 

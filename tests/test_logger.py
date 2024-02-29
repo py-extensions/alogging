@@ -1,18 +1,14 @@
 import asyncio
-import logging
 import time
-from asyncio import Queue
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from threading import Thread
-from unittest.mock import patch
 
 import pytest
 import pytest_asyncio
-from aiosmtpd.controller import Controller
 
 import alogging
-from alogging.handlers import HTTPHandler, RotatingFileHandler, SysLogHandler
+from alogging.handlers import HTTPHandler, RotatingFileHandler
 
 TEST_FILE_PATH = Path("test.log")
 
