@@ -1,0 +1,39 @@
+name: Format
+on:
+  workflow_call:
+  push:
+  pull_request:
+
+jobs:
+  pr-format:
+    name: PR format checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2
+
+      - uses: actions/cache@v3
+        name: Define a cache for the virtual environment based on the dependencies lock file
+        with:
+          path: ./.venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+
+      - name: Install the project dependencies
+        run: poetry install --only dev --no-root
+
+      - name: Run black to check formatting
+        run: poetry run black . --check
+
+      - name: Run isort to check import ordering
+        run: poetry run isort . --check
+
+      - name: Run autoflake to check unused imports
+        run: poetry run autoflake . --check
+
+      - name: Run pylint to check for linting errors
+        run: poetry run pylint alogging --exit-zero
