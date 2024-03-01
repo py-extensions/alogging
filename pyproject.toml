@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "py-extensions-alogging"
-version = "0.1.0"
+version = "0.1.1"
 description = "Async Logging for Python"
 authors = ["Yury Sokov <me@yurzs.dev>"]
 license = "MIT"
