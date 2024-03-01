@@ -54,7 +54,7 @@ class AsyncLogger(logging.Logger):
         )
 
     @classmethod
-    async def start_backend(cls):
+    async def _start_backend(cls):
         """Start backend process."""
 
         if cls._BACKEND_PROCESS is not None:
@@ -88,6 +88,12 @@ class AsyncLogger(logging.Logger):
                 cls._BACKEND_PROCESS = None
 
             QUEUE = Queue()
+
+    @classmethod
+    def start_backend(cls):
+        """Start backend process."""
+
+        threading.Thread(target=asyncio.run, args=[cls._start_backend()]).start()
 
     @sync_logger
     def addHandler(self, hdlr: alogging.handlers.HandlerWrapper):
