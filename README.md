@@ -16,7 +16,7 @@ To use `alogging`, you first need to start the backend process. This can be done
 import asyncio
 import alogging
 
-asyncio.run(alogging.start_backend())
+alogging.start_backend()
 ```
 
 You can then get a logger and use it just like you would with the standard `logging` module:
